@@ -1,8 +1,0 @@
-#Reinicia la interfaz PPPoE con tal de obtener una nueva dirección IP
-#Llama a Get_IP para informar del cambio de IP
-
-/interface pppoe-client disable MovistarPPPoE
-:delay 15
-/interface pppoe-client enable MovistarPPPoE
-:delay 15
-/system script run Get_IP
