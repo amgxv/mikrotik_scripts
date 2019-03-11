@@ -1,0 +1,2 @@
+# Pide una nueva IP por DHCP
+/ip dhcp-client release [find interface=MasMovil]
