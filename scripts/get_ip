@@ -1,0 +1,30 @@
+# Obtiene la dirección IP de la interfaz deseada y manda un mensaje via Telegram
+# Útil para conexiones con IP dinámica
+
+:global oldip;
+:local ip;
+
+:local botid "---"
+:local chatid "---"
+:set ip [/ip address get [find interface=---] address]
+
+   :for i from=( [:len $ip] - 1) to=0 do={
+       :if ( [:pick $ip $i] = "/") do={ 
+           :set ip [:pick $ip 0 $i]
+       } 
+   }
+
+:set oldip [/ip address get [find interface=---] address]
+
+   :for i from=( [:len $oldip] - 1) to=0 do={
+       :if ( [:pick $oldip $i] = "/") do={ 
+           :set oldip [:pick $oldip 0 $i]
+       } 
+   }
+
+:local text "Tu IP es $ip"
+
+/tool fetch url="https://api.telegram.org/$botid/sendMessage\?chat_id=$chatid&text=$text" keep-result=no mode=https
+
+:log info $ip
+
