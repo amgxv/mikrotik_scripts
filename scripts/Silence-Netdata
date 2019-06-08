@@ -1,0 +1,23 @@
+:local netdataAuthToken "TOKEN"
+:local netdatahttpauthuser "IF-BASIC-AUTH-ADD-USER"
+:local netdatahttpauthpass "IF-BASIC-AUTH-ADD-PASS"
+:local host1 "HOST"
+:local host2 "HOST"
+:local host3 "HOST"
+
+# Silence host1
+
+/tool fetch url="https://$netdatahttpauthuser:$netdatahttpauthpass@<url>/api/v1/manage/health?cmd=SILENCE ALL&hosts=$host1" mode=https keep-result=no http-header-field="X-Auth-Token:$netdataAuthToken"
+:log info "SILENCED ALARMS FOR $host1"
+
+# Silence host2
+
+/tool fetch url="https://$netdatahttpauthuser:$netdatahttpauthpass@<url>/api/v1/manage/health?cmd=SILENCE ALL&hosts=$host2" mode=https keep-result=no http-header-field="X-Auth-Token:$netdataAuthToken"
+:log info "SILENCED ALARMS FOR $host2"
+
+# Silence HTTP Checks
+
+/tool fetch url="https://$netdatahttpauthuser:$netdatahttpauthpass@<url>/api/v1/manage/health?cmd=DISABLE&chart=httpcheck_<host>.status&hosts=$host3" mode=https keep-result=no http-header-field="X-Auth-Token:$netdataAuthToken"
+/tool fetch url="https://$netdatahttpauthuser:$netdatahttpauthpass@<url>/api/v1/manage/health?cmd=DISABLE&chart=httpcheck_<host>.response_time&hosts=$host3" mode=https keep-result=no http-header-field="X-Auth-Token:$netdataAuthToken"
+:log info "SILENCED httpchecks ALARMS FOR $host3"
+
