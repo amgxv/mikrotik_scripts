@@ -1,0 +1,22 @@
+:local currentIP
+:set currentIP [/ip address get [find interface=interface] address]
+   
+   :for i from=( [:len $currentIP] - 1) to=0 do={
+       :if ( [:pick $currentIP $i] = "/") do={ 
+           :set currentIP [:pick $currentIP 0 $i]
+       } 
+   }
+
+:local "DO_LOG_FILE_PREFIX" "/disk1/logs/DDNS_DO."
+:local "DO_TOKEN" "CHANGEME"
+:local "DO_DNS" "domain.com"
+:local "DO_TTL" 30
+:local "DO_HEADER" "Content-Type: application/json,Authorization: Bearer $"DO_TOKEN""
+:local "hostname" "subdomain.domain.com"
+:local "do_data" "{\"ttl\":$"DO_TTL", \"data\":\"$"currentIP"\"}"
+:local "recordid" "00ID00"
+:local "do_url" "https://api.digitalocean.com/v2/domains/$"DO_DNS"/records/$"recordid""
+
+/tool fetch mode=https http-method=put http-header-field=$"DO_HEADER" http-data=$"do_data" url=$"do_url" dst-path=($"DO_LOG_FILE_PREFIX".$hostname)
+
+:log info "$hostname updated : $currentIP"
